@@ -6,8 +6,8 @@ module ActiveRecord
     
     module ActMethods
       def globalize_accessors(*attr_names)
-        languages = attr_names
-        attribs = globalize_options[:translated_attributes]
+        languages = attr_names  
+        attribs = self.translated_attribute_names
         attribs.each do |attr_name|
           languages.each do |with_locale|
             define_method :"#{attr_name}_#{with_locale}" do
@@ -15,8 +15,7 @@ module ActiveRecord
             end
 
             define_method :"#{attr_name}_#{with_locale}=" do |val|
-              globalize.stash with_locale, attr_name, val
-              self[attr_name] = val
+              globalize.write with_locale, attr_name, val
             end
           end
         end  
